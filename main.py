@@ -1,5 +1,4 @@
 import logging
-from msvcrt import kbhit
 import threading
 import sql
 from vk_api import longpoll

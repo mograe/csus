@@ -1,0 +1,23 @@
+aiohttp==3.8.1
+aiosignal==1.2.0
+async-timeout==4.0.2
+attrs==21.4.0
+certifi==2021.10.8
+charset-normalizer==2.0.7
+choicelib==0.1.4
+et-xmlfile==1.1.0
+frozenlist==1.3.0
+idna==3.3
+multidict==5.2.0
+openpyxl==3.0.9
+pydantic==1.9.0
+pyTelegramBotAPI==4.2.0
+requests==2.26.0
+typing-extensions==3.10.0.2
+urllib3==1.26.7
+vbml==1.1
+vk-api==11.9.7
+vkbottle @ https://github.com/vkbottle/vkbottle/archive/master.zip
+vkbottle-types==5.131.131.12
+watchgod==0.7
+yarl==1.7.2

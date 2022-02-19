@@ -17,7 +17,5 @@ typing-extensions==3.10.0.2
 urllib3==1.26.7
 vbml==1.1
 vk-api==11.9.7
-vkbottle @ https://github.com/vkbottle/vkbottle/archive/master.zip
-vkbottle-types==5.131.131.12
 watchgod==0.7
 yarl==1.7.2

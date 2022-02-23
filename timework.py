@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 dayWeeks = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота','воскресенье']
 dayWeeks_ind = ['понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу','воскресенье']
+time_lessons = ['8:00','9:40','11:20','13:15','15:00','16:40','18:20','19:55']
 
 def isNextWeek(day):
     return not day in dayWeeks[getToday():]

@@ -19,3 +19,15 @@ def getNextDay():
     date1 = date.today()
     date1 += timedelta(1)
     return date1.weekday()
+
+def add_begin_zero(number):
+    if number // 10 == 0:
+        return '0' + str(number)
+    return str(number)
+
+def next_weekday(weekday):
+    d = date.today()
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0: # Target day already happened this week
+        days_ahead += 7
+    return d + timedelta(days_ahead)

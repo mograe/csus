@@ -9,7 +9,7 @@ def get_text_rasp(id, day):
         return f"Пар на {dayWeeks_ind[day]} нет! Отдыхайте ☺️"
     text_rasp = f"Расписание на {dayWeeks_ind[day]} {day_lessons.day}.{add_begin_zero(day_lessons.month)}:\n\n"
     for lesson in sql.get_rasp(id,day):
-        text_rasp += f"Пара {lesson[0]} ({time_lessons[lesson[0]]}):\n {lesson[1]}\n {lesson[2]}\n\n"
+        text_rasp += f"Пара {lesson[0]} ({time_lessons[lesson[0]-1]}):\n {lesson[1]}\n {lesson[2]}\n\n"
     return text_rasp[:-2]
 
 

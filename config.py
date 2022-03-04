@@ -7,7 +7,7 @@ logging.basicConfig(
     filemode='w',
     format=formatter,
     datefmt='%Y-%m-%d %H:%M:%S',
-    level=logging.INFO
+    level=logging.WARNING
 )
 
 vk_token = os.environ.get("csus_token")

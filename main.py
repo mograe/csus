@@ -25,9 +25,7 @@ def matrixOfList(list, numRow):
 def choose_group(id,reg=False):
     keyboard = VkBot.create_keyboard(([] if reg else [['Отмена']]))
     sql.chg_position(id, 1 if reg else 4)
-    msg = "Введите Вашу группу из списка:\n"
-    for group in group_list:
-        msg += f"-{group}\n"
+    msg = "Введите Вашу группу:\n Например: МТ-201, МП101 или МНмаг 201\n Доступны пока только группу Математического факультета ЧелГУ"
     bot.send_msg(id, msg, keyboard.get_keyboard())
 
         
@@ -55,7 +53,8 @@ def processing_message(id, text):
         choose_group(id,reg=True)
         sql.add_sub(id)
     
-    elif number_position == 1: 
+    elif number_position == 1:
+        text = text.replace('-','').replace(' ','').upper()
         if text in group_list:
             sql.set_group(id, text)
             bot.send_msg(id, f"Была выбрана группа {text}")
@@ -91,7 +90,7 @@ def processing_message(id, text):
             main_menu(id)
 
     elif number_position == 4:
-        text = text.replace('-',' ').upper()
+        text = text.replace('-','').replace(' ','').upper()
         if text in group_list:
             sql.set_group(id, text)
             bot.send_msg(id, f"Была выбрана группа {text}")

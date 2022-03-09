@@ -3,6 +3,6 @@
 *.png
 *.text
 test.py
-db.db
+*.db
 *.log
 config.py

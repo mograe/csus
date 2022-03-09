@@ -16,7 +16,7 @@ def get_text_rasp(id, day):
     text_rasp = f"Расписание на {dayWeeks_ind[day]} {day_lessons.day}.{add_begin_zero(day_lessons.month)}:\n\n"
     for lesson in sql.get_rasp(id,day):
         aud_and_t = auditory_and_teacher(lesson[2])
-        text_rasp += f"Пара {lesson[0]} ({time_lessons[lesson[0]-1]}):\n {lesson[1].title()}\n Преподаватель: {aud_and_t[0]}\n Аудитория: {aud_and_t[-1]} \n\n"
+        text_rasp += f"Пара {lesson[0]} ({time_lessons[lesson[0]-1]}):\n {lesson[1].capitalize()}\n Преподаватель: {aud_and_t[0]}\n Аудитория: {aud_and_t[-1]} \n\n"
     return text_rasp[:-2]
 
 

@@ -96,7 +96,7 @@ def processing_message(id, text):
             bot.send_msg(id, f"Была выбрана группа {text}")
             logging.info(f"{id} choose group {text}")
             main_menu(id)
-        elif text == 'Отмена':
+        elif text == 'ОТМЕНА':
             main_menu(id)
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")
@@ -109,7 +109,7 @@ def processing_message(id, text):
             bot.send_msg(id, f"Была выбрана подгруппа {text}")
             logging.info(f"{id} choose subgroup {text}")
             main_menu(id)
-        elif text == 'Отмена':
+        elif text == 'ОТМЕНА':
             main_menu(id)
         else:
             print(text)

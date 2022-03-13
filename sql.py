@@ -1,5 +1,7 @@
+
 import sqlite3
 from timework import dayWeeks, isEvenWeek
+from datetime import datetime
 
 def table_to_lists(table):
     list = []
@@ -10,9 +12,15 @@ def table_to_lists(table):
 def add_lesson(name, tar, number, group, day, week, subgroup):
     db = sqlite3.connect("db.db")
     sql_cur = db.cursor()
-    print('work')
     sql_cur.execute(f"INSERT INTO lessons (name, tar, number, lesson_group, day, week, subgroup)" 
         + f"VALUES ('{name}','{tar}',{number},'{group}','{day}',{week},{subgroup})")
+    db.commit()
+
+def add_retake(date, teacher, lesson, group, time, cabinet):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"INSERT INTO retakes (date, teacher, lesson, lesson_group, time, cabinet)" 
+        + f"VALUES ('{date}','{teacher}','{lesson}','{group}','{time}','{cabinet}')")
     db.commit()
 
 def get_grouplist():
@@ -78,6 +86,20 @@ def get_rasp(user_id, day):
      f"AND day = '{day_str}' AND (week = 0 OR week = {int(isEvenWeek(day_str))+1})" +
      f"AND (subgroup = 0 OR subgroup = {get_subgroup(user_id)}) ORDER BY number")
     return sql_cur.fetchall()
+
+def get_retakes(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT * from retakes WHERE lesson_group = '{get_group(user_id)}'")
+    table = sql_cur.fetchall()
+    res = []
+    for i in table:
+        dt_obj = datetime.strptime(i[1],'%Y-%m-%d %H:%M:%S')
+        if(datetime.now() < dt_obj):
+            res.append(i)
+    return res
+    
+
 
 def get_dayslist(user_id):
     db = sqlite3.connect("db.db")

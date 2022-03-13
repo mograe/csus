@@ -35,7 +35,7 @@ def choose_subgroup(id,reg=False):
     bot.send_msg(id, "Выберите подгруппу", keyboard.get_keyboard())
 
 def main_menu(id):
-    keyboard = VkBot.create_keyboard([['Расписание'],['Изменить группу','Изменить подгруппу']])
+    keyboard = VkBot.create_keyboard([['Расписание'],['Пересдачи'],['Изменить группу','Изменить подгруппу']])
     sql.chg_position(id,3)
     bot.send_msg(id, "Вы в главном меню", keyboard.get_keyboard())
 
@@ -80,6 +80,9 @@ def processing_message(id, text):
     elif number_position == 3:
         if text == "Расписание":
             choose_day(id)
+        elif text == "Пересдачи":
+            bot.send_msg(id,getrasp.get_retakes(id))
+            main_menu(id)
         elif text == "Изменить группу":
             choose_group(id)
         elif text == "Изменить подгруппу":

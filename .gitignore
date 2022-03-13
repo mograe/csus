@@ -6,3 +6,5 @@ test.py
 *.db
 *.log
 config.py
+retake.xlsx
+config.py

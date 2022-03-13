@@ -1,6 +1,6 @@
 from csv import excel
 from openpyxl import *
-from sql import add_lesson
+from sql import add_lesson, add_retake
 
 def next_alpha(s):
     return chr((ord(s.upper())+1 - 65) % 26 + 65)
@@ -70,8 +70,29 @@ def excel_to_db(sheet):
         symb = next_alpha(next_alpha(symb))
         digital = 15
 
-if __name__ == '__main__':
+def excel_retake_to_db(sheet):
+    digital = 1
+    while sheet['A'+str(digital)].value != None:
+        date = sheet['A'+str(digital)].value
+        teacher = sheet['B'+str(digital)].value
+        lesson = sheet['C'+str(digital)].value
+        groups = sheet['D'+str(digital)].value.split(', ')
+        begin_time = sheet['E'+str(digital)].value
+        cabinet = sheet['F'+str(digital)].value
+        for g in groups:
+            add_retake(date,teacher,lesson,g,begin_time,cabinet)
+        digital += 1
+
+
+def start_timetable():
     wb = load_workbook(filename="math.xlsx")
     for sheet in wb:
         print(sheet.title)
         excel_to_db(sheet)
+
+def start_retake():
+    wb = load_workbook(filename='retake.xlsx')
+    for sheet in wb:
+        excel_retake_to_db(sheet)
+
+start_retake()

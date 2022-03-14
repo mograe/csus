@@ -97,7 +97,7 @@ def processing_message(id, text):
             bot.send_msg(id,getrasp.get_retakes(id))
             main_menu(id)
         elif text == "Изменить группу":
-            choose_group(id)
+            choose_faculty(id)
         elif text == "Изменить подгруппу":
             choose_subgroup(id)
         else:

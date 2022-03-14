@@ -74,7 +74,7 @@ def processing_message(id, text):
             logging.info(f"{id} choose group {text}")
             choose_subgroup(id,reg=True)
         if text == 'ОТМЕНА':
-            choose_course(id, sql.get_faculty_user, True)
+            choose_course(id, sql.get_faculty_user(), True)
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")
@@ -115,7 +115,7 @@ def processing_message(id, text):
             logging.info(f"{id} choose group {text}")
             main_menu(id)
         elif text == 'ОТМЕНА':
-            choose_course(id, sql.get_faculty_user, True)
+            choose_course(id, sql.get_faculty_user())
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")

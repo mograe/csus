@@ -23,7 +23,7 @@ def matrixOfList(list, numRow):
     return matrix
 
 def choose_faculty(id,reg=False):    
-    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([['Отмена']]))
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([] if reg else [['Отмена']]))
     sql.chg_position(id, 7 if reg else 8)
     msg = "Выберете ваш факультет"
     bot.send_msg(id, msg, keyboard.get_keyboard())
@@ -173,7 +173,7 @@ def processing_message(id, text):
             sql.set_course(id, text)
             choose_group(id, True if number_position == 9 else False )
         elif text == "Отмена":
-            choose_faculty(id, True if number_position == 9 else False )
+            choose_faculty(id, True if number_position == 9 else False)
         else:
             bot.send_msg(id, f"Вы выбрали неверный курс. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")

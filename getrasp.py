@@ -32,4 +32,6 @@ def get_retakes(id):
         text_rasp += f"Пересдача на {first_word(r[1])} ({r[5][:-3]}):\n {r[3]}\n Преподаватель: {r[2]}\n Аудитория: {r[6]} \n\n"
     return text_rasp[:-2]
 
+    
+
 

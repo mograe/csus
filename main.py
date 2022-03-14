@@ -23,20 +23,20 @@ def matrixOfList(list, numRow):
     return matrix
 
 def choose_faculty(id,reg=False):    
-    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([] if reg else [['Отмена']]))
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([['Отмена']]))
     sql.chg_position(id, 7 if reg else 8)
     msg = "Выберете ваш факультет"
     bot.send_msg(id, msg, keyboard.get_keyboard())
 
 def choose_course(id,fac,reg=False):
-    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_courselist(fac),3) + ([] if reg else [['Отмена']]))
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_courselist(fac),3) + ([['Отмена']]))
     sql.chg_position(id, 9 if reg else 10)
     msg = "Выберете курс"
     bot.send_msg(id, msg, keyboard.get_keyboard())
     
 
 def choose_group(id,reg=False):
-    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_grouplist1(sql.get_faculty_user(id),sql.get_course(id)),2) + ([] if reg else [['Отмена']]))
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_grouplist1(sql.get_faculty_user(id),sql.get_course(id)),2) + ([['Отмена']]))
     sql.chg_position(id, 1 if reg else 4)
     msg = "Выберите группу"
     bot.send_msg(id, msg, keyboard.get_keyboard())
@@ -73,6 +73,8 @@ def processing_message(id, text):
             bot.send_msg(id, f"Была выбрана группа {text}")
             logging.info(f"{id} choose group {text}")
             choose_subgroup(id,reg=True)
+        if text == 'ОТМЕНА':
+            choose_course(id, sql.get_faculty_user, True)
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")
@@ -113,7 +115,7 @@ def processing_message(id, text):
             logging.info(f"{id} choose group {text}")
             main_menu(id)
         elif text == 'ОТМЕНА':
-            main_menu(id)
+            choose_course(id, sql.get_faculty_user, True)
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")
@@ -170,15 +172,15 @@ def processing_message(id, text):
             logging.info(f"{id} choose course {text}")
             sql.set_course(id, text)
             choose_group(id, True if number_position == 9 else False )
-        elif text == "Отмена" and number_position == 10:
-            main_menu(id)
+        elif text == "Отмена":
+            choose_faculty(id, True if number_position == 9 else False )
         else:
             bot.send_msg(id, f"Вы выбрали неверный курс. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")
-            choose_faculty(id, True if number_position == 9 else False )
+            choose_course(id, True if number_position == 9 else False )
 
     
-if __name__ == '__main__':
+if __name__ == '__main__': 
     logging.info("Bot is starting")
     while True:
         session = requests.Session()

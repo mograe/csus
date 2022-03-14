@@ -73,7 +73,7 @@ def processing_message(id, text):
             bot.send_msg(id, f"Была выбрана группа {text}")
             logging.info(f"{id} choose group {text}")
             choose_subgroup(id,reg=True)
-        if text == 'ОТМЕНА':
+        elif text == 'ОТМЕНА':
             choose_course(id, sql.get_faculty_user(id), True)
         else:
             bot.send_msg(id, f"Вы выбрали неверную группу. Попробуйте ещё раз")

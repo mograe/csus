@@ -48,7 +48,7 @@ def choose_subgroup(id,reg=False):
     bot.send_msg(id, "Выберите подгруппу", keyboard.get_keyboard())
 
 def main_menu(id):
-    keyboard = VkBot.create_keyboard([['Расписание']]+ (['Пересдачи'] if sql.get_faculty_user(id) == 'Математический' else []) +[['Изменить группу','Изменить подгруппу']])
+    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи']] if sql.get_faculty_user(id) == 'Математический' else []) +[['Изменить группу','Изменить подгруппу']])
     sql.chg_position(id,3)
     bot.send_msg(id, "Вы в главном меню", keyboard.get_keyboard())
 

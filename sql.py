@@ -106,3 +106,52 @@ def get_dayslist(user_id):
     sql_cur = db.cursor()
     sql_cur.execute(f"SELECT DISTINCT day from lessons WHERE lesson_group = '{get_group(user_id)}'")
     return table_to_lists(sql_cur.fetchall())
+
+def add_lesson_group(fac,course,group):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"INSERT INTO lesson_groups (lesson_group, faculty, course)" 
+        + f"VALUES ('{group}','{fac}', '{course}')")
+    db.commit()
+
+def get_facultylist():
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute("SELECT DISTINCT faculty from lesson_groups")
+    return table_to_lists(sql_cur.fetchall())
+
+def get_courselist(fac):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT DISTINCT course from lesson_groups WHERE faculty = '{fac}'")
+    return table_to_lists(sql_cur.fetchall())
+
+def get_faculty_user(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT faculty from users WHERE user_id = '{user_id}'")
+    return sql_cur.fetchall()[0][0]
+
+def set_faculty(user_id, faculty):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"UPDATE users SET faculty = '{faculty}' WHERE user_id = '{user_id}'")
+    db.commit()
+
+def get_course(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT course from users WHERE user_id = '{user_id}'")
+    return sql_cur.fetchall()[0][0]
+
+def set_course(user_id, course):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"UPDATE users SET course = '{course}' WHERE user_id = '{user_id}'")
+    db.commit()
+
+def get_grouplist1(faculty, course):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT DISTINCT lesson_group from lesson_groups WHERE faculty = '{faculty}' AND course = '{course}'")
+    return table_to_lists(sql_cur.fetchall())

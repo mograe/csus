@@ -22,10 +22,23 @@ def matrixOfList(list, numRow):
         matrix[column].append(list[i])
     return matrix
 
+def choose_faculty(id,reg=False):    
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([] if reg else [['Отмена']]))
+    sql.chg_position(id, 7 if reg else 8)
+    msg = "Выберете ваш факультет"
+    bot.send_msg(id, msg, keyboard.get_keyboard())
+
+def choose_course(id,fac,reg=False):
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_courselist(fac),3) + ([] if reg else [['Отмена']]))
+    sql.chg_position(id, 9 if reg else 10)
+    msg = "Выберете курс"
+    bot.send_msg(id, msg, keyboard.get_keyboard())
+    
+
 def choose_group(id,reg=False):
-    keyboard = VkBot.create_keyboard(([] if reg else [['Отмена']]))
+    keyboard = VkBot.create_keyboard(matrixOfList(sql.get_grouplist1(sql.get_faculty_user(id),sql.get_course(id)),2) + ([] if reg else [['Отмена']]))
     sql.chg_position(id, 1 if reg else 4)
-    msg = "Введите Вашу группу:\n Например: МТ-201, МП101 или МНмаг 201\n Доступны пока только группу Математического факультета ЧелГУ"
+    msg = "Выберите группу"
     bot.send_msg(id, msg, keyboard.get_keyboard())
 
         
@@ -50,7 +63,7 @@ def processing_message(id, text):
 
     if number_position == 0: #Приветствие
         bot.send_msg(id, 'Привет. Это бот "Расписание ЧелГУ". Пожалуйста, пройдите регистрацию.')
-        choose_group(id,reg=True)
+        choose_faculty(id,reg=True)
         sql.add_sub(id)
     
     elif number_position == 1:
@@ -137,6 +150,32 @@ def processing_message(id, text):
             bot.send_msg(id, f"Вы выбрали неверный день. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")
             choose_day(id)
+
+    elif number_position in [7, 8]:
+        if text in sql.get_facultylist():
+            bot.send_msg(id, f"Был выбран факультет {text}")
+            logging.info(f"{id} choose fac {text}")
+            sql.set_faculty(id,text)
+            choose_course(id, text, True if number_position == 7 else False)
+        elif text == "Отмена" and number_position == 8:
+            main_menu(id)
+        else:
+            bot.send_msg(id, f"Вы выбрали неверный факультет. Попробуйте ещё раз")
+            logging.error(f"{id} write wrong message")
+            choose_faculty(id, True if number_position == 7 else False)
+    
+    elif number_position in [9, 10]:
+        if text in sql.get_courselist(sql.get_faculty_user(id)):
+            bot.send_msg(id, f"Был выбран курс {text}")
+            logging.info(f"{id} choose course {text}")
+            sql.set_course(id, text)
+            choose_group(id, True if number_position == 9 else False )
+        elif text == "Отмена" and number_position == 10:
+            main_menu(id)
+        else:
+            bot.send_msg(id, f"Вы выбрали неверный курс. Попробуйте ещё раз")
+            logging.error(f"{id} write wrong message")
+            choose_faculty(id, True if number_position == 9 else False )
 
     
 if __name__ == '__main__':

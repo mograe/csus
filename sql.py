@@ -173,3 +173,15 @@ def group_is_have_subgroup(user_id):
     sql_cur = db.cursor()
     sql_cur.execute(f"SELECT DISTINCT subgroup from lessons WHERE lesson_group = '{get_group(user_id)}'")
     return not table_to_lists(sql_cur.fetchall()) == [0]
+
+def sub_user(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"UPDATE users SET sub = 1 WHERE user_id = '{user_id}'")
+    db.commit()
+
+def unsub_user(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"UPDATE users SET sub = 0 WHERE user_id = '{user_id}'")
+    db.commit()

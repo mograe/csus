@@ -22,6 +22,10 @@ def matrixOfList(list, numRow):
         matrix[column].append(list[i])
     return matrix
 
+def send_rasp(id):
+    bot.send_msg(id,getrasp.get_text_rasp(id,timework.getNextDay()))
+
+
 def choose_faculty(id,reg=False):    
     keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([] if reg else [['Отмена']]))
     sql.chg_position(id, 7 if reg else 8)
@@ -48,7 +52,7 @@ def choose_subgroup(id,reg=False):
     bot.send_msg(id, "Выберите подгруппу", keyboard.get_keyboard())
 
 def main_menu(id):
-    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи']] if sql.get_faculty_user(id) == 'Математический' else []) +[['Изменить группу','Изменить подгруппу']])
+    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи'] + ['Подписаться на рассылку'] if not sql.get_sub_user(id) else ['Отписаться от рассылки']] if sql.get_faculty_user(id) == 'Математический' else ([['Подписаться на рассылку']] if not sql.get_sub_user(id) else [['Отписаться от рассылки']])) + [['Изменить группу'] + (['Изменить подгруппу'] if sql.group_is_have_subgroup(id) else [])])
     sql.chg_position(id,3)
     bot.send_msg(id, "Вы в главном меню", keyboard.get_keyboard())
 
@@ -56,6 +60,18 @@ def choose_day(id):
     keyboard = VkBot.create_keyboard([["На сегодня","На завтра"]] + matrixOfList(sql.get_dayslist(id),3) + [["Отмена"]])
     sql.chg_position(id,6)
     bot.send_msg(id,"Выберите на какой день вам нужно расписание", keyboard.get_keyboard())
+
+
+def subscribe(id):
+    sql.sub_user(id)
+    bot.send_msg(id, f"Вы подписались на рассылку для группы {sql.get_group(id)}")
+    main_menu(id)
+
+def unsubscribe(id):
+    sql.unsub_user(id)
+    bot.send_msg(id, f"Вы отписались на рассылку для группы {sql.get_group(id)}")
+    main_menu(id)
+
 
 def processing_message(id, text):
     number_position = sql.take_position(id)
@@ -72,7 +88,11 @@ def processing_message(id, text):
             sql.set_group(id, text)
             bot.send_msg(id, f"Была выбрана группа {text}")
             logging.info(f"{id} choose group {text}")
-            choose_subgroup(id,reg=True)
+            if sql.group_is_have_subgroup(id):
+                choose_subgroup(id,reg=True)
+            else:
+                sql.set_subgroup(id,0)
+                main_menu(id)
         elif text == 'ОТМЕНА':
             choose_course(id, sql.get_faculty_user(id), True)
         else:
@@ -102,6 +122,10 @@ def processing_message(id, text):
             choose_faculty(id)
         elif text == "Изменить подгруппу":
             choose_subgroup(id)
+        elif text == 'Подписаться на рассылку':
+            subscribe(id)
+        elif text == 'Отписаться от расслыки':
+            unsubscribe(id)
         else:
             bot.send_msg(id,"Что-то пошло не так. Попробуйте ещё раз")
             logging.error(f"{id} write wrong message")

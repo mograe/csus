@@ -155,3 +155,21 @@ def get_grouplist1(faculty, course):
     sql_cur = db.cursor()
     sql_cur.execute(f"SELECT DISTINCT lesson_group from lesson_groups WHERE faculty = '{faculty}' AND course = '{course}'")
     return table_to_lists(sql_cur.fetchall())
+
+def get_sub_list():
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT user_id from users WHERE sub = 1")
+    return table_to_lists(sql_cur.fetchall())
+
+def get_sub_user(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT sub from users WHERE user_id = '{user_id}'")
+    return sql_cur.fetchall()[0][0] == 1
+
+def group_is_have_subgroup(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT DISTINCT subgroup from lessons WHERE lesson_group = '{get_group(user_id)}'")
+    return not table_to_lists(sql_cur.fetchall()) == [0]

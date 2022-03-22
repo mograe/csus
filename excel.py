@@ -36,11 +36,14 @@ def excel_to_db(sheet):
         digital += 1
 
     endOfTable = digital-3
-    symb = next_alpha(columnNumber)
     digital = 15
     print(symb+str(digital))
     while sheet[symb+str(digital)].value != None:
-        group = sheet[symb+str(digital)].value
+        symb = next_alpha(symb)
+    max_symp = symb
+    symb = next_alpha(columnNumber)
+    while sheet[symb+str(digital)].value != None:
+        group = sheet[symb+str(digital)].value.replace(' ','')
         print(group)
         digital += 1
         while digital < endOfTable:
@@ -51,7 +54,8 @@ def excel_to_db(sheet):
             if sheet[columnDays+str(digital)].value != None:
                 day = str(sheet[columnDays+str(digital)].value).lower()
             for n, i in enumerate([symb,next_alpha(symb)]):
-                if(sheet[i+str(digital)].value != None):
+                if(sheet[i+str(digital)].value != None and not str(sheet[i+str(digital)].value).startswith('+') and 
+                not sheet[i+str(digital)].value in ['ДЕНЬ', 'САМОСТОЯТЕЛЬНЫХ', 'ЗАНЯТИЙ']):
                     cell1 = str(sheet[i+str(digital)].value)
                     if(cell1.startswith("1Н.") or cell1.startswith("2Н.")):
                         week = int(cell1.strip()[0])
@@ -59,7 +63,7 @@ def excel_to_db(sheet):
                     else:
                         name = cell1.strip()
                     teacherAndClassroom = str(sheet[i+str(digital+1)].value)
-                    if(isMerge(sheet[i+str(digital)],sheet)):
+                    if(isMerge(sheet[i+str(digital)],sheet) or max_symp <= 'H' ):
                         add_lesson(name, teacherAndClassroom, number, group, day, week, subgroup)
                         break
                     subgroup = n+1
@@ -95,4 +99,9 @@ def start_retake():
     for sheet in wb:
         excel_retake_to_db(sheet)
 
-start_retake()
+wb = load_workbook(filename="math.xlsx")
+sheets = [wb['Маг1'],wb['ММм101,МПм201,202']]
+for s in sheets:
+    excel_to_db(s)
+
+

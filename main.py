@@ -23,6 +23,7 @@ def matrixOfList(list, numRow):
     return matrix
 
 def send_rasp(id):
+    bot = VkBot(vt)
     bot.send_msg(id,getrasp.get_text_rasp(id,timework.getNextDay()))
 
 
@@ -132,7 +133,7 @@ def processing_message(id, text):
             main_menu(id)
 
     elif number_position == 4:
-        text = text.replace('-','').replace(' ','').upper()
+        text = text.replace('-','').replace(' ','')
         if text in group_list:
             sql.set_group(id, text)
             bot.send_msg(id, f"Была выбрана группа {text}")

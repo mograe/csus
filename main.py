@@ -134,7 +134,6 @@ def processing_message(id, text):
 
     elif number_position == 4:
         text = text.replace('-','').replace(' ','')
-        print(text in group_list)
         if text in group_list:
             sql.set_group(id, text)
             bot.send_msg(id, f"Была выбрана группа {text}")

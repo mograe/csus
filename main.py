@@ -52,7 +52,7 @@ def choose_subgroup(id,reg=False):
     bot.send_msg(id, "Выберите подгруппу", keyboard.get_keyboard())
 
 def main_menu(id):
-    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи'] + ['Подписаться на рассылку'] if not sql.get_sub_user(id) else ['Отписаться от рассылки']] if sql.get_faculty_user(id) == 'Математический' else ([['Подписаться на рассылку']] if not sql.get_sub_user(id) else [['Отписаться от рассылки']])) + [['Изменить группу'] + (['Изменить подгруппу'] if sql.group_is_have_subgroup(id) else [])])
+    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи'] + (['Подписаться на рассылку'] if not sql.get_sub_user(id) else ['Отписаться от рассылки'])] if sql.get_faculty_user(id) == 'Математический' else ([['Подписаться на рассылку']] if not sql.get_sub_user(id) else [['Отписаться от рассылки']])) + [['Изменить группу'] + (['Изменить подгруппу'] if sql.group_is_have_subgroup(id) else [])])
     sql.chg_position(id,3)
     bot.send_msg(id, "Вы в главном меню", keyboard.get_keyboard())
 
@@ -124,7 +124,7 @@ def processing_message(id, text):
             choose_subgroup(id)
         elif text == 'Подписаться на рассылку':
             subscribe(id)
-        elif text == 'Отписаться от расслыки':
+        elif text == 'Отписаться от рассылки':
             unsubscribe(id)
         else:
             bot.send_msg(id,"Что-то пошло не так. Попробуйте ещё раз")

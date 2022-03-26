@@ -13,8 +13,10 @@ def send_rasp(id):
 
 def send_timetable():
     list_users = sql.get_sub_list()
+    print('hello')
     for i in list_users:
-        send_rasp(i)
+        if(sql.get_rasp(i,timework.getNextDay()) != []):
+            send_rasp(i)
 
 schedule.every().day.at("18:00").do(send_timetable)
 

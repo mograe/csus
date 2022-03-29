@@ -26,6 +26,12 @@ def send_rasp(id):
     bot = VkBot(vt)
     bot.send_msg(id,getrasp.get_text_rasp(id,timework.getNextDay()))
 
+def go_to_mm(id):
+    bot = VkBot(vt)
+    keyboard = VkBot.create_keyboard([['Расписание']]+ ([['Пересдачи'] + (['Подписаться на рассылку'] if not sql.get_sub_user(id) else ['Отписаться от рассылки'])] if sql.get_faculty_user(id) == 'Математический' else ([['Подписаться на рассылку']] if not sql.get_sub_user(id) else [['Отписаться от рассылки']])) + [['Изменить группу'] + (['Изменить подгруппу'] if sql.group_is_have_subgroup(id) else [])])
+    sql.chg_position(id,3)
+    bot.send_msg(id, "Вы в главном меню", keyboard.get_keyboard())
+ 
 
 def choose_faculty(id,reg=False):    
     keyboard = VkBot.create_keyboard(matrixOfList(sql.get_facultylist(),2) + ([] if reg else [['Отмена']]))

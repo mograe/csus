@@ -18,7 +18,7 @@ def send_timetable():
         if(sql.get_rasp(i,timework.getNextDay()) != []):
             send_rasp(i)
 
-schedule.every().day.at("20:04").do(send_timetable)
+schedule.every().day.at("18:00").do(send_timetable)
 
 while True:
     schedule.run_pending()

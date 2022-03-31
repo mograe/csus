@@ -41,6 +41,7 @@ def excel_to_db(sheet):
     while sheet[symb+str(digital)].value != None:
         symb = next_alpha(symb)
     max_symp = symb
+    print(max_symp)
     symb = next_alpha(columnNumber)
     while sheet[symb+str(digital)].value != None:
         group = sheet[symb+str(digital)].value.replace(' ','')
@@ -53,10 +54,12 @@ def excel_to_db(sheet):
                 number = sheet[columnNumber+str(digital)].value
             if sheet[columnDays+str(digital)].value != None:
                 day = str(sheet[columnDays+str(digital)].value).lower()
-            for n, i in enumerate([symb,next_alpha(symb)]):
+            list = [symb,next_alpha(symb)] if max_symp > 'H' else [symb]
+            for n, i in enumerate(list):
                 if(sheet[i+str(digital)].value != None and not str(sheet[i+str(digital)].value).startswith('+') and 
                 not sheet[i+str(digital)].value in ['ДЕНЬ', 'САМОСТОЯТЕЛЬНЫХ', 'ЗАНЯТИЙ']):
                     cell1 = str(sheet[i+str(digital)].value)
+                    print(cell1)
                     if(cell1.startswith("1Н.") or cell1.startswith("2Н.")):
                         week = int(cell1.strip()[0])
                         name = cell1.strip()[3:].strip()
@@ -64,6 +67,7 @@ def excel_to_db(sheet):
                         name = cell1.strip()
                     teacherAndClassroom = str(sheet[i+str(digital+1)].value)
                     if(isMerge(sheet[i+str(digital)],sheet) or max_symp <= 'H' ):
+                        print(name, teacherAndClassroom, number, group, day, week, subgroup)
                         add_lesson(name, teacherAndClassroom, number, group, day, week, subgroup)
                         break
                     subgroup = n+1
@@ -71,7 +75,7 @@ def excel_to_db(sheet):
             if(sheet[symb+str(digital)].value != None or sheet[next_alpha(symb)+str(digital)].value):
                 digital+=1
             digital += 1      
-        symb = next_alpha(next_alpha(symb))
+        symb = next_alpha(next_alpha(symb) if max_symp > 'H' else symb)
         digital = 15
 
 def excel_retake_to_db(sheet):
@@ -100,7 +104,7 @@ def start_retake():
         excel_retake_to_db(sheet)
 
 wb = load_workbook(filename="math.xlsx")
-sheets = [wb['Маг1'],wb['ММм101,МПм201,202']]
+sheets = [wb,wb['ММм101,МПм201,202']]
 for s in sheets:
     excel_to_db(s)
 

@@ -104,7 +104,7 @@ def start_retake():
         excel_retake_to_db(sheet)
 
 wb = load_workbook(filename="math.xlsx")
-sheets = [wb,wb['ММм101,МПм201,202']]
+sheets = [wb['Маг1'],wb['ММм101,МПм201,202']]
 for s in sheets:
     excel_to_db(s)
 

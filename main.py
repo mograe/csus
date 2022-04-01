@@ -47,7 +47,7 @@ def choose_faculty(id,reg=False, sub = False):
         sql.chg_position(id, 11)
     else:
         sql.chg_position(id, 8)
-    msg = "Выберете ваш факультет"
+    msg = "Выберите ваш факультет"
     bot.send_msg(id, msg, keyboard.get_keyboard())
 
 def choose_course(id,fac,reg=False, sub = False):
@@ -58,7 +58,7 @@ def choose_course(id,fac,reg=False, sub = False):
         sql.chg_position(id, 12)
     else:
         sql.chg_position(id, 10)    
-    msg = "Выберете курс"
+    msg = "Выберите курс"
     bot.send_msg(id, msg, keyboard.get_keyboard())
     
 

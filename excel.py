@@ -81,6 +81,7 @@ def excel_to_db(sheet):
 def excel_retake_to_db(sheet):
     digital = 1
     while sheet['A'+str(digital)].value != None:
+        print(sheet['A'+str(digital)].value)
         date = sheet['A'+str(digital)].value
         teacher = sheet['B'+str(digital)].value
         lesson = sheet['C'+str(digital)].value
@@ -88,7 +89,7 @@ def excel_retake_to_db(sheet):
         begin_time = sheet['E'+str(digital)].value
         cabinet = sheet['F'+str(digital)].value
         for g in groups:
-            add_retake(date,teacher,lesson,g,begin_time,cabinet)
+            add_retake(date,teacher,lesson,g.replace('-',''),begin_time,cabinet)
         digital += 1
 
 
@@ -103,9 +104,6 @@ def start_retake():
     for sheet in wb:
         excel_retake_to_db(sheet)
 
-wb = load_workbook(filename="math.xlsx")
-sheets = [wb['Маг1'],wb['ММм101,МПм201,202']]
-for s in sheets:
-    excel_to_db(s)
+start_retake()
 
 

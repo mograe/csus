@@ -2,6 +2,7 @@
 import sqlite3
 from timework import dayWeeks, isEvenWeek
 from datetime import datetime
+import json
 
 def table_to_lists(table):
     list = []
@@ -85,6 +86,15 @@ def get_rasp(user_id, day):
     sql_cur.execute(f"SELECT number, name, tar from lessons WHERE lesson_group = '{get_group(user_id)}'" +
      f"AND day = '{day_str}' AND (week = 0 OR week = {int(isEvenWeek(day_str))+1})" +
      f"AND (subgroup = 0 OR subgroup = {get_subgroup(user_id)}) ORDER BY number")
+    return sql_cur.fetchall()
+
+def get_rasp_by_group(group, day):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    day_str = dayWeeks[day]
+    sql_cur.execute(f"SELECT number, name, tar, subgroup from lessons WHERE lesson_group = '{group}'" +
+     f"AND day = '{day_str}' AND (week = 0 OR week = {int(isEvenWeek(day_str))+1})" +
+      "ORDER BY number")
     return sql_cur.fetchall()
 
 def get_retakes(user_id):
@@ -174,6 +184,30 @@ def group_is_have_subgroup(user_id):
     sql_cur.execute(f"SELECT DISTINCT subgroup from lessons WHERE lesson_group = '{get_group(user_id)}'")
     return not table_to_lists(sql_cur.fetchall()) == [0]
 
+def get_sub_user_list(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT sub_list from users WHERE user_id = '{user_id}'")
+    return sql_cur.fetchall()[0][0]
+
+def add_sub_user(user_id, group):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    list = json.loads(get_sub_user_list(user_id))
+    list.append(group)
+    print(list)
+    print(json.dumps(list))
+    sql_cur.execute(f"UPDATE users SET sub_list = '{json.dumps(list)}' WHERE user_id = '{user_id}'")
+    db.commit()
+
+def unsub_list_user(user_id, group):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    list = json.loads(get_sub_user_list(user_id))
+    list.remove(group)
+    sql_cur.execute(f"UPDATE users SET sub_list = '{json.dumps(list)}' WHERE user_id = '{user_id}'")
+    db.commit()
+
 def sub_user(user_id):
     db = sqlite3.connect("db.db")
     sql_cur = db.cursor()
@@ -185,3 +219,44 @@ def unsub_user(user_id):
     sql_cur = db.cursor()
     sql_cur.execute(f"UPDATE users SET sub = 0 WHERE user_id = '{user_id}'")
     db.commit()
+
+def get_all_users():
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT user_id, sub, sub_list from users")
+    return sql_cur.fetchall()
+
+def get_all_users_retakes():
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT user_id, sub_retakes from users")
+    return sql_cur.fetchall()
+
+def get_retakes_user_list(user_id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT sub_retakes from users WHERE user_id = '{user_id}'")
+    return sql_cur.fetchall()[0][0]
+
+def add_retakes_user(user_id, retake):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    list = json.loads(get_retakes_user_list(user_id))
+    list.append(retake)
+    sql_cur.execute(f"UPDATE users SET sub_retakes = '{json.dumps(list)}' WHERE user_id = '{user_id}'")
+    db.commit()
+
+def unsub_retakes_list_user(user_id, retake):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    list = json.loads(get_retakes_user_list(user_id))
+    print(list)
+    list.remove(retake)
+    sql_cur.execute(f"UPDATE users SET sub_retakes = '{json.dumps(list)}' WHERE user_id = '{user_id}'")
+    db.commit()
+
+def get_retake_by_id(id):
+    db = sqlite3.connect("db.db")
+    sql_cur = db.cursor()
+    sql_cur.execute(f"SELECT * from retakes WHERE id = {int(id)}")
+    return sql_cur.fetchall()[0]

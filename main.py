@@ -178,7 +178,7 @@ def processing_message(id, text):
         if text == "Расписание":
             choose_day(id)
         elif text == "Пересдачи":
-            bot.send_msg_with_pic(id,getrasp.get_retakes(id),random_pic())
+            bot.send_msg(id,getrasp.get_retakes(id))
             sub_retakes(id)
         elif text == "Изменить группу":
             choose_faculty(id)
@@ -230,11 +230,11 @@ def processing_message(id, text):
             logging.info(f"{id} choose day {text}")
             if text == "На завтра":
                 print(timework.getNextDay())
-                bot.send_msg_with_pic(id,getrasp.get_text_rasp(id,timework.getNextDay()),random_pic())
+                bot.send_msg(id,getrasp.get_text_rasp(id,timework.getNextDay()))
             elif text == "На сегодня":
-                bot.send_msg_with_pic(id,getrasp.get_text_rasp(id,timework.getToday()),random_pic())
+                bot.send_msg(id,getrasp.get_text_rasp(id,timework.getToday()))
             else:
-                bot.send_msg_with_pic(id,getrasp.get_text_rasp(id,dayWeeks.index(text)),random_pic())
+                bot.send_msg(id,getrasp.get_text_rasp(id,dayWeeks.index(text)))
             main_menu(id)
         elif text == "Отмена":
             main_menu(id)

@@ -11,17 +11,17 @@ from random_anime_picture import random_pic
 
 def send_rasp(id):
     bot = VkBot(vt)
-    bot.send_msg_with_pic(id,getrasp.get_text_rasp(id,timework.getNextDay()),random_pic())
+    bot.send_msg(id,getrasp.get_text_rasp(id,timework.getNextDay()))
     go_to_mm(id)
 
 def send_rasp_for_group(id, group):
     bot = VkBot(vt)
-    bot.send_msg_with_pic(id,getrasp.get_text_rasp_for_group(group,timework.getNextDay()),random_pic())
+    bot.send_msg(id,getrasp.get_text_rasp_for_group(group,timework.getNextDay()))
     go_to_mm(id)
 
 def send_retake(id, id_retake):
     bot = VkBot(vt)
-    bot.send_msg_with_pic(id,getrasp.get_retakes_by_id(id_retake),random_pic())
+    bot.send_msg(id,getrasp.get_retakes_by_id(id_retake))
     go_to_mm(id)
 
 def send_timetable():

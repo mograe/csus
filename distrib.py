@@ -45,9 +45,11 @@ def send_retakes():
         if list_retakes != []:
             for r in list_retakes:
                 send_retake(id,r)
+                if timework.days_left(sql.get_retake_by_id(r)[1]) <= 1:
+                    sql.unsub_retakes_list_user(id,r)
 
-schedule.every().day.at("01:41").do(send_timetable)
-schedule.every().day.at("06:01").do(send_retakes)
+schedule.every().day.at("18:00").do(send_timetable)
+schedule.every().day.at("20:00").do(send_retakes)
 
 while True:
     schedule.run_pending()

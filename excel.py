@@ -38,7 +38,7 @@ def excel_to_db(sheet):
     endOfTable = digital-3
     digital = 15
     print(symb+str(digital))
-    while sheet[symb+str(digital)].value != None:
+    while sheet[symb+str(digital)].value != None or isMerge(sheet[symb+str(digital)],sheet):
         symb = next_alpha(symb)
     max_symp = symb
     print(max_symp)
@@ -50,6 +50,7 @@ def excel_to_db(sheet):
         while digital < endOfTable:
             week = 0
             subgroup = 0
+            ns = 1
             if sheet[columnNumber+str(digital)].value != None:
                 number = sheet[columnNumber+str(digital)].value
             if sheet[columnDays+str(digital)].value != None:
@@ -65,16 +66,25 @@ def excel_to_db(sheet):
                         name = cell1.strip()[3:].strip()
                     else:
                         name = cell1.strip()
-                    teacherAndClassroom = str(sheet[i+str(digital+1)].value)
+                    ns = 1
+                    while sheet[i+str(digital+ns)].border.bottom.style == None and sheet[i+str(digital+ns+1)].value != None:
+                        name += ' ' + str(sheet[i+str(digital+ns)].value)
+                        ns += 1
+                    teacherAndClassroom = str(sheet[i+str(digital+ns)].value)
+                    ns += 1
                     if(isMerge(sheet[i+str(digital)],sheet) or max_symp <= 'H' ):
                         print(name, teacherAndClassroom, number, group, day, week, subgroup)
                         add_lesson(name, teacherAndClassroom, number, group, day, week, subgroup)
                         break
                     subgroup = n+1
                     add_lesson(name, teacherAndClassroom, number, group, day, week, subgroup)
-            if(sheet[symb+str(digital)].value != None or sheet[next_alpha(symb)+str(digital)].value):
-                digital+=1
-            digital += 1      
+            # if(sheet[symb+str(digital)].value != None or sheet[next_alpha(symb)+str(digital)].value):
+            #     digital += 1
+            digital += ns
+
+            # while (sheet[symb+str(digital)].value == None and digital < endOfTable):
+            #    print(symb+str(digital)) 
+            #    digital += 1      
         symb = next_alpha(next_alpha(symb) if max_symp > 'H' else symb)
         digital = 15
 
@@ -104,6 +114,10 @@ def start_retake():
     for sheet in wb:
         excel_retake_to_db(sheet)
 
-start_retake()
+#start_timetable()
+
+wb = load_workbook(filename="math.xlsx")
+sheet = wb['МТ-301,302 МП-301']
+excel_to_db(sheet)
 
 

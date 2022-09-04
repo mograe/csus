@@ -114,10 +114,6 @@ def start_retake():
     for sheet in wb:
         excel_retake_to_db(sheet)
 
-#start_timetable()
-
-wb = load_workbook(filename="math.xlsx")
-sheet = wb['МТ-301,302 МП-301']
-excel_to_db(sheet)
+start_timetable()
 
 
